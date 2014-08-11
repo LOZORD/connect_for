@@ -22,19 +22,31 @@ class Board
 
   def to_s
     ret = ">\n"
-    ret += '.'
-    ret += num_line
-    ret += ".\n"
+    ret += '#'
+    #ret += num_line
+    ret += ( ' * ' * @width )
+    ret += "#\n"
     (0...@width).each do |i|
-      ret += '|'
-      (0...@height).each do |j|
-        ret += ( ' ' + @board[j][i].to_s + ' ' )
+      #ret += '|'
+
+      col_label = (i + 1).to_s
+
+      while (col_label.size < @width.to_s.size)
+        col_label += ' '
       end
-      ret += "|\n"
+
+      ret += ( col_label )
+
+      (0...@height).each do |j|
+        ret += ( ' ' + @board[i][j].to_s + ' ' )
+      end
+      #ret += "|\n"
+      ret += ( col_label + "\n" )
     end
-    ret += '.'
-    ret += num_line
-    ret += ".\n<\n\n"
+    ret += '#'
+    #ret += num_line
+    ret += ( ' * ' * @width )
+    ret += "#\n<\n\n"
     return ret
   end
 
