@@ -8,8 +8,8 @@ require "colored"
 MAX_NUM_PLAYERS = 4
 
 class Board
-  attr_accessor :width
-  attr_accessor :height
+  attr_reader :width
+  attr_reader :height
   attr_accessor :board
 
   def initialize (w = 7, h = 6)
@@ -19,7 +19,7 @@ class Board
   end
 
   def in_bounds?(x, y)
-    x.between?(0...@width) && y.between?(0...@height)
+    x.between?(0...width) && y.between?(0...height)
   end
 
   def to_s
@@ -29,20 +29,20 @@ class Board
     #ret += ( ' * ' * @width )
     ret += "#\n"
     # TODO this doesn't look very reasonable
-    (0...@width - 1).each do |i|
+    (0...width - 1).each do |i|
       ret += '|'
 
       """
       col_label = (i + 1).to_s
 
-      while (col_label.size < @width.to_s.size)
+      while (col_label.size < width.to_s.size)
         col_label += ' '
       end
       """
 
       #ret += ( col_label )
 
-      (0..@height).each do |j|
+      (0..height).each do |j|
         ret += ( ' ' + @board[j][i].to_s + ' ' )
       end
       ret += "|\n"
@@ -63,14 +63,14 @@ class Board
   def num_line
     """
     ret = ''
-    (1..@height).each do |a|
+    (1..height).each do |a|
       ret += ( a.even? ? ' X ' : ' O ' )
     end # each do
     ret
     """
 
     # this isn't perfect because numbers > 9 will take up more space XXX
-    ' ' + (1..@width).to_a.join('  ') + ' '
+    ' ' + (1..width).to_a.join('  ') + ' '
   end
 end
 
