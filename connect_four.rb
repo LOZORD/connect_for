@@ -19,7 +19,7 @@ class Board
   end
 
   def in_bounds?(x, y)
-    x.between?(0...width) && y.between?(0...height)
+    x.between?(0, width) && y.between?(0, height)
   end
 
   def to_s
