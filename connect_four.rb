@@ -1,3 +1,5 @@
+#! /usr/bin/env ruby
+
 # A Ruby Implementation of Connect Four
 # By Leo Rudberg, made in 2014
 
