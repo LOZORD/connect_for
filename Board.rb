@@ -63,5 +63,23 @@ class Board
     # this isn't perfect because numbers > 9 will take up more space XXX
     ' ' + (1..width).to_a.join('  ') + ' '
   end
+
+  def check_win(col, some_color)
+    #TODO
+    # check down
+    #for (i in @board[col])
+    # check left
+
+    # check right
+
+    # check NW
+
+    # check NE
+
+    # check SW
+
+    # check SE
+    false
+  end
 end
 

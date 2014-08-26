@@ -49,4 +49,8 @@ class Player
 
     false
   end
+
+  def to_s
+    @name
+  end
 end

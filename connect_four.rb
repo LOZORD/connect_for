@@ -11,35 +11,7 @@ require_relative 'Player.rb'
 
 # XXX TESTING XXX #
 
-Game.new
-
-"""
-the_board = Board.new
-
-puts the_board.to_s
-
-# FIXME can't use Place::RED
-me = Player.new(the_board, :red, 'Leo')
-
-me.place_piece(3)
-
-puts the_board.to_s
-
-him = Player.new(the_board, :blue, 'Thor')
-
-him.place_piece(5)
-
-puts the_board.to_s
-
-me.place_piece(5)
-
-puts the_board.to_s
-
-
-doom = Player.new(the_board, :green, 'MF DOOM')
-
-doom.place_piece(3)
-puts the_board.to_s
-doom.place_piece(2)
-puts the_board.to_s
-"""
+# first set up the game
+my_game = Game.new
+# then play it
+my_game.play
