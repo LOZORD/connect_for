@@ -1,20 +1,27 @@
-MAX_NUM_PLAYERS = 4
-
 class Player
   attr_accessor :color
   attr_accessor :name
   attr_accessor :num_pieces
   attr_accessor :board
 
-  def initialize (some_board, some_color, some_name)
-    if some_color == Place::EMPTY
-      puts 'You can\'t do that!' # TODO make error
-      return false
-    end
+  @@player_count = 0
+
+  COLORS = [:red, :blue, :green, :yellow] #, :cyan, :magenta]
+
+  def initialize (some_board, some_name = "Player #{@@player_count + 1}")
+    return false if @@player_count >= COLORS.size
+
     @board = some_board
-    @color = some_color.to_sym
+
+    @color = COLORS[@@player_count]
+
     @name = some_name.to_s
+
     @num_pieces = 10 # XXX hardcoded
+
+    @@player_count += 1
+
+    true
   end
 
   def place_piece (col)
