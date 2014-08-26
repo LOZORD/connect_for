@@ -2,8 +2,10 @@ class Board
   attr_reader :width
   attr_reader :height
   attr_accessor :board
+  attr_reader :game
 
-  def initialize (w = 7, h = 6)
+  def initialize (g, w = 7, h = 6)
+    @game = g
     @width = w
     @height = h
     @board = Array.new(w) { Array.new (h) { Place.new } }
@@ -22,17 +24,6 @@ class Board
     # TODO this doesn't look very reasonable
     (0...width - 1).each do |i|
       ret += '|'
-
-      """
-      col_label = (i + 1).to_s
-
-      while (col_label.size < width.to_s.size)
-        col_label += ' '
-      end
-      """
-
-      #ret += ( col_label )
-
       (0..height).each do |j|
         ret += ( ' ' + @board[j][i].to_s + ' ' )
       end
@@ -64,22 +55,55 @@ class Board
     ' ' + (1..width).to_a.join('  ') + ' '
   end
 
-  def check_win(col, some_color)
-    #TODO
-    # check down
-    #for (i in @board[col])
-    # check left
+  def check_win(row, col, some_player)
+    # check vertical
+    r = 0
+    count = 0
 
-    # check right
+    while (r < @height)
+      player_owns = @board[col][r].belongs_to?(some_player)
+      count = player_owns ? count + 1 : 0
+      r += 1
+      return true if count >= @game.connect_num
+    end
 
-    # check NW
+    # check horizontal
+    c = 0
+    count = 0
 
-    # check NE
+    while(c < @width)
+      player_owns = @board[c][row].belongs_to?(some_player)
+      count = player_owns ? count + 1 : 0
+      c += 1
+      return true if count >= @game.connect_num
+    end
+    # check SE/NW TODO
 
-    # check SW
+    # check SW/NE TODO
 
-    # check SE
     false
   end
-end
+  """
+  # the block will determine which direction things go in
+  def check_iterate (init_row = 0, init_col = 0, some_player ,&block)
+    row = init_row
+    col = init_col
 
+    count = 0
+
+    while (row < @height)
+      while (col < @width)
+        player_owns? = board[row][col].belongs_to?(some_player)
+
+        count = player_owns? ? count + 1 : 0
+
+        return true if count >= @game.connect_num
+
+        yield block
+      end
+    end
+
+    false
+  end
+  """
+end # end class

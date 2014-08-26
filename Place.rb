@@ -24,6 +24,10 @@ class Place
     @place_type == some_player.color
   end
 
+  def belongs_to?(p)
+    belongs_to_player?(p)
+  end
+
   def to_s
     case @place_type
       when RED

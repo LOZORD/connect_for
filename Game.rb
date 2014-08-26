@@ -1,17 +1,19 @@
 class Game
   attr_reader :board
   attr_reader :players
+  attr_reader :connect_num
 
+  # TODO args for Board dimensions
   def initialize
-    # TODO variable Board dimensions
-    @board = Board.new
+    @board = Board.new(self)
     @players = []
     @done = false
     @curr_turn = 0
+    @connect_num = 4 # XXX hardcoded
 
     puts 'Please enter the Players for this game, end with a "#"'
 
-    while ((entry = gets.chomp)[0] != '#')
+    while ((entry = gets.chomp.strip)[0] != '#')
       @players << Player.new(@board, entry)
       puts "\tWelcome to the game #{entry}!"
     end
@@ -30,19 +32,22 @@ class Game
       print "#{curr_player.to_s}'s turn! "
       print  "Enter a number between 1 and #{@board.width}: "
 
-      while (!(col = gets.chomp.to_i).between?(1, @board.width))
+      while (!(col = gets.chomp.strip.to_i).between?(1, @board.width))
         puts  "Please enter a number between 1 and #{@board.width}!"
       end
 
-      curr_player.place_piece(col)
+      # human indexing to computer indexing
+      col = col -1
+
+      row = curr_player.place_piece(col)
 
       #TODO check that if that was a winning move
-      @done = @board.check_win(col, curr_player.color)
+      @done = @board.check_win(row, col, curr_player)
 
       @curr_turn += 1
     end
-
-    puts "#{curr_player.to_s} is the winner!"
+    puts @board.to_s
+    puts "#{curr_player.to_s} is the winner!".cyan
   end
 
   def get_curr_player

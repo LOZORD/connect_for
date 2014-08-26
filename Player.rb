@@ -25,8 +25,6 @@ class Player
   end
 
   def place_piece (col)
-    col = col - 1 # convert human 1-indexing to computer 0-indexing
-
     # first check that the column is in bounds
     if col < 0 || col >= board.width
       puts 'Out of bounds!'
@@ -39,11 +37,11 @@ class Player
       return false
     end
 
-    @board[col].reverse_each do |place|
+    @board[col].reverse.each_with_index do |place, row_num|
       if place.empty?
         place.place_type = @color
         #place = Place.new(@color) FIXME is this more correct?
-        return true
+        return @board.height - row_num - 1
       end
     end
 
