@@ -8,12 +8,20 @@ class Board
     @game = g
     @width = w
     @height = h
-    @board = Array.new(w) { Array.new (h) { Place.new } }
+    # normal cartesian grid with (0,0) being SW corner
+    @board = Array.new(w) { |x| Array.new(h) { |y| Place.new(x, h - y - 1) } }
   end
 
   def in_bounds?(x, y)
-    x.between?(0, width) && y.between?(0, height)
+    x.between?(0, width - 1) && y.between?(0, height - 1)
+    # place_at(x,y).nil?
   end
+
+  def at(x, y)
+    @board[x][- y - 1]
+  end
+
+  alias_method :place_at, :at
 
   def to_s
     ret = ">\n"
@@ -21,7 +29,7 @@ class Board
     ret += num_line
     #ret += ( ' * ' * @width )
     ret += "#\n"
-    # TODO this doesn't look very reasonable
+    # TODO this doesn't look very reasonable ( USE AT METHOD )
     (0...width - 1).each do |i|
       ret += '|'
       (0..height).each do |j|
@@ -60,8 +68,12 @@ class Board
     r = 0
     count = 0
 
+    puts 'MOVE WAS'
+    p at(col, row)
+    puts '***'
+
     while (r < @height)
-      player_owns = @board[col][r].belongs_to?(some_player)
+      player_owns = place_at(col, r).belongs_to?(some_player)
       count = player_owns ? count + 1 : 0
       r += 1
       return true if count >= @game.connect_num
@@ -70,40 +82,31 @@ class Board
     # check horizontal
     c = 0
     count = 0
-
     while(c < @width)
-      player_owns = @board[c][row].belongs_to?(some_player)
+      player_owns = place_at(c, row).belongs_to?(some_player)
       count = player_owns ? count + 1 : 0
       c += 1
       return true if count >= @game.connect_num
     end
-    # check SE/NW TODO
-
     # check SW/NE TODO
+    min = [row, col].min
+    col_min = col - min
+    row_min = row - min
 
-    false
-  end
-  """
-  # the block will determine which direction things go in
-  def check_iterate (init_row = 0, init_col = 0, some_player ,&block)
-    row = init_row
-    col = init_col
+    puts "col_min = #{col_min}"
+    puts "row_min = #{row_min}"
 
     count = 0
-
-    while (row < @height)
-      while (col < @width)
-        player_owns? = board[row][col].belongs_to?(some_player)
-
-        count = player_owns? ? count + 1 : 0
-
-        return true if count >= @game.connect_num
-
-        yield block
-      end
+    while(in_bounds?(col_min, row_min))
+      p at(col_min, row_min)
+      player_owns = at(col_min, row_min).belongs_to?(some_player)
+      count = player_owns ? count + 1 :0
+      col_min += 1
+      row_min += 1
+      return true if count >= @game.connect_num
     end
+    # check SE/NW TODO
 
     false
   end
-  """
 end # end class

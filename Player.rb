@@ -37,11 +37,11 @@ class Player
       return false
     end
 
-    @board[col].reverse.each_with_index do |place, row_num|
+
+    @board[col].reverse_each do |place|
       if place.empty?
         place.place_type = @color
-        #place = Place.new(@color) FIXME is this more correct?
-        return @board.height - row_num - 1
+        return place.y
       end
     end
 

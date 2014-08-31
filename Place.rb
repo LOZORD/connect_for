@@ -6,9 +6,12 @@ class Place
   YELLOW = :yellow
 
   attr_accessor :place_type
-  # x and y coord attrs?
+  attr_reader :x
+  attr_reader :y
 
-  def initialize (type = EMPTY)
+  def initialize (_x, _y, type = EMPTY)
+    @x = _x
+    @y = _y
     @place_type = type
   end
 

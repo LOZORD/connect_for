@@ -33,7 +33,7 @@ class Game
       print  "Enter a number between 1 and #{@board.width}: "
 
       while (!(col = gets.chomp.strip.to_i).between?(1, @board.width))
-        puts  "Please enter a number between 1 and #{@board.width}!"
+        print  "Please enter a number between 1 and #{@board.width}! "
       end
 
       # human indexing to computer indexing
