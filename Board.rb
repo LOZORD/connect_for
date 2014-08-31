@@ -85,14 +85,11 @@ class Board
     true
   end
 
+  # XXX might be good to move this into the Game class
   def check_win(row, col, some_player)
     # check vertical
     r = 0
     count = 0
-
-    puts 'MOVE WAS'
-    p at(col, row)
-    puts '***'
 
     while (r < @height)
       player_owns = place_at(col, r).belongs_to?(some_player)
@@ -110,24 +107,27 @@ class Board
       c += 1
       return true if count >= @game.connect_num
     end
-    # check SW/NE TODO
+
+    # check SW/NE
     min = [row, col].min
     col_min = col - min
     row_min = row - min
-
-    puts "col_min = #{col_min}"
-    puts "row_min = #{row_min}"
-
     count = 0
+
     while(in_bounds?(col_min, row_min))
-      p at(col_min, row_min)
       player_owns = at(col_min, row_min).belongs_to?(some_player)
       count = player_owns ? count + 1 :0
       col_min += 1
       row_min += 1
       return true if count >= @game.connect_num
     end
+
     # check SE/NW TODO
+    # let (c,r) be the place NW of (col,row) st (c,r) is at the top of the grid
+    # that means that c is (col + row) - height
+    c = (col + row) - height
+    # and r is at the top
+    r = height - 1
 
     false
   end

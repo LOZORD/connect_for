@@ -14,6 +14,7 @@ class Game
     puts 'Please enter the Players for this game, end with a "#"'
 
     while ((entry = gets.chomp.strip)[0] != '#')
+      # TODO put in check for duplicate names
       @players << Player.new(@board, entry)
       puts "\tWelcome to the game #{entry}!"
     end
