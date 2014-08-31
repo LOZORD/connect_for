@@ -8,7 +8,7 @@ class Board
     @game = g
     @width = w
     @height = h
-    # normal cartesian grid with (0,0) being SW corner
+    # normal Cartesian grid with (0,0) being SW corner
     @board = Array.new(w) { |x| Array.new(h) { |y| Place.new(x, h - y - 1) } }
   end
 
@@ -19,6 +19,10 @@ class Board
 
   def at(x, y)
     @board[x][- y - 1]
+  end
+
+  def top_of_col(col_num)
+    place_at(col_num, height - 1)
   end
 
   alias_method :place_at, :at
@@ -61,6 +65,24 @@ class Board
 
     # this isn't perfect because numbers > 9 will take up more space XXX
     ' ' + (1..width).to_a.join('  ') + ' '
+  end
+
+  def check_placement (col)
+    """
+    # first check that the column is in bounds
+    if !col.between?(0, width - 1)
+      puts 'Out of bounds!' #TODO make error
+      return false
+    end
+    """ # XXX MADE REDUNDANT BY MAIN GAME LOOP
+
+    # then check if we can place any pieces in that column
+    if top_of_col(col).full?
+      puts 'This column is already full!' #TODO make error
+      return false
+    end
+
+    true
   end
 
   def check_win(row, col, some_player)

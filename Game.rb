@@ -37,7 +37,12 @@ class Game
       end
 
       # human indexing to computer indexing
-      col = col -1
+      col = col - 1
+
+      while (!@board.check_placement(col))
+        print "\tPlease enter a new number between 1 and #{@board.width}! "
+        col = gets.chomp.strip.to_i - 1
+      end
 
       row = curr_player.place_piece(col)
 

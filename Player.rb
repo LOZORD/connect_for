@@ -4,6 +4,8 @@ class Player
   attr_accessor :num_pieces
   attr_accessor :board
 
+  attr_reader :num_wins
+
   @@player_count = 0
 
   COLORS = [:red, :blue, :green, :yellow] #, :cyan, :magenta]
@@ -21,30 +23,19 @@ class Player
 
     @@player_count += 1
 
+    @num_wins = 0
+
     true
   end
 
   def place_piece (col)
-    # first check that the column is in bounds
-    if col < 0 || col >= board.width
-      puts 'Out of bounds!'
-      return false
-    end
-
-    # then check if we can place any pieces in that column
-    if @board[col][0].full?
-      puts 'This column is already full!' #TODO make error
-      return false
-    end
-
-
     @board[col].reverse_each do |place|
       if place.empty?
         place.place_type = @color
         return place.y
       end
     end
-
+    puts 'SOMETHING BAD HAS HAPPENED!'
     false
   end
 
