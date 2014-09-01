@@ -1,3 +1,5 @@
+# This class is what makes up the elements of the Board grid
+# Places are (x,y) coordinates that are owned by no one, or by a single player
 class Place
   EMPTY = :empty
   RED = :red
@@ -9,9 +11,11 @@ class Place
   attr_reader :x
   attr_reader :y
 
-  def initialize (_x, _y, type = EMPTY)
-    @x = _x
-    @y = _y
+  alias_method :belongs_to?, :belongs_to_player?
+
+  def initialize(some_x, some_y, type = EMPTY)
+    @x = some_x
+    @y = some_y
     @place_type = type
   end
 
@@ -33,17 +37,16 @@ class Place
 
   def to_s
     case @place_type
-      when RED
-        return "R".red
-      when BLUE
-        return "B".blue
-      when GREEN
-        return "G".green
-      when YELLOW
-        return "Y".yellow
-      else
-        return "_".white
+    when RED
+      return 'R'.red
+    when BLUE
+      return 'B'.blue
+    when GREEN
+      return 'G'.green
+    when YELLOW
+      return 'Y'.yellow
+    else
+      return '_'.white
     end
   end
 end
-

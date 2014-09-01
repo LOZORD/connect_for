@@ -8,3 +8,4 @@ describe Board do
     @board.in_bounds?(5, 8).should == false
   end
 end
+
