@@ -140,7 +140,7 @@ class Board
       r -= 1
       return true if count >= @game.connect_num
     end
-
+    # TODO: use the colored gem to highlight the winning move
     false
   end
 end # end class

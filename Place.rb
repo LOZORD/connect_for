@@ -11,8 +11,6 @@ class Place
   attr_reader :x
   attr_reader :y
 
-  alias_method :belongs_to?, :belongs_to_player?
-
   def initialize(some_x, some_y, type = EMPTY)
     @x = some_x
     @y = some_y
@@ -31,9 +29,7 @@ class Place
     @place_type == some_player.color
   end
 
-  def belongs_to?(p)
-    belongs_to_player?(p)
-  end
+  alias_method :belongs_to?, :belongs_to_player?
 
   def to_s
     case @place_type
