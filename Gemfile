@@ -4,6 +4,6 @@ gem 'colored'
 
 group :development do
   gem 'rspec'
-  #gem 'debugger'
+  # gem 'debugger'
   gem rubocop
 end

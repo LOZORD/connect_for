@@ -4,13 +4,12 @@ class Game
   attr_reader :players
   attr_reader :connect_num
 
-  # TODO: add connect_num arg
-  def initialize(w = 7, h = 6)
+  def initialize(w = 7, h = 6, cn = 4)
     @board = Board.new(self, w, h)
     @players = []
     @done = false
     @curr_turn = 0
-    @connect_num = 4 # XXX hardcoded
+    @connect_num = cn
 
     return false if build_players.empty? # TODO: raise exception or something
   end
