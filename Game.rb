@@ -3,9 +3,8 @@ class Game
   attr_reader :players
   attr_reader :connect_num
 
-  # TODO args for Board dimensions
-  def initialize
-    @board = Board.new(self)
+  def initialize (w = 7, h = 6)
+    @board = Board.new(self, w, h)
     @players = []
     @done = false
     @curr_turn = 0
@@ -62,7 +61,6 @@ class Game
 
   def get_curr_player
     index = @curr_turn % @players.size
-
     @players[index]
   end
 end
