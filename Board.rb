@@ -72,66 +72,75 @@ class Board
       puts 'This column is already full!' # TODO: make error
       return false
     end
-
     true
   end
 
   # XXX might be good to move this into the Game class
   def check_win(row, col, some_player)
-    # check vertical
-    r = 0
-    count = 0
+    return true if check_vertical(col, some_player)
 
+    return true if check_horizontal(row, some_player)
+
+    return true if check_sw_ne(row, col, some_player)
+
+    return true if check_nw_se(row, col, some_player) # FIXME
+    # TODO: use the colored gem to highlight the winning move
+    false
+  end
+
+  def check_vertical(col, p)
+    count = r = 0
     while r < @height
-      player_owns = place_at(col, r).belongs_to?(some_player)
+      player_owns = place_at(col, r).belongs_to? p
       count = player_owns ? count + 1 : 0
       r += 1
       return true if count >= @game.connect_num
     end
+    false
+  end
 
-    # check horizontal
-    c = 0
-    count = 0
+  def check_horizontal(row, p)
+    count = c = 0
     while c < @width
-      player_owns = place_at(c, row).belongs_to?(some_player)
+      player_owns = place_at(c, row).belongs_to? p
       count = player_owns ? count + 1 : 0
       c += 1
       return true if count >= @game.connect_num
     end
+    false
+  end
 
-    # check SW/NE
+  def check_sw_ne(row, col, p)
     min = [row, col].min
     c = col - min
     r = row - min
     count = 0
-
     while in_bounds?(c, r)
-      player_owns = at(c, r).belongs_to?(some_player)
+      player_owns = place_at(c, r).belongs_to? p
       count = player_owns ? count + 1 : 0
       c += 1
       r += 1
       return true if count >= @game.connect_num
     end
+    false
+  end
 
-    # check SE/NW
-    # let (c,r) be the place NW of (col,row) st (c,r) is at the top of the grid
-    # that means that c is (col + row) - height
+  # let (c,r) be the place NW of (col,row) st (c,r) is at the top of the grid
+  # that means that c is (col + row) - height
+  # and r is at the top
+  def check_nw_se(row, col, p)
     c = (col + row) - height # FIXME
-    # and r is at the top
     r = height - 1
-
-    puts "col #{c}"
-    puts "row #{r}"
-
+    puts "col #{c}" # XXX
+    puts "row #{r}" # XXX
     while in_bounds?(c, r)
       p place_at(c, r)
-      player_owns = at(c, r).belongs_to?(some_player)
+      player_owns = at(c, r).belongs_to? p
       count = player_owns ? count + 1 : 0
       c += 1
       r -= 1
       return true if count >= @game.connect_num
     end
-    # TODO: use the colored gem to highlight the winning move
     false
   end
 end # end class
