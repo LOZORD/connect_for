@@ -1,10 +1,11 @@
+# This class implements a Board of pieces for playing Connect Four
 class Board
   attr_reader :width
   attr_reader :height
   attr_accessor :board
   attr_reader :game
 
-  def initialize (g, w = 7, h = 6)
+  def initialize(g, w = 7, h = 6)
     @game = g
     @width = w
     @height = h
@@ -21,6 +22,10 @@ class Board
     @board[x][- y - 1]
   end
 
+  def column(n)
+    @board[n]
+  end
+
   def top_of_col(col_num)
     place_at(col_num, height - 1)
   end
@@ -31,43 +36,30 @@ class Board
     ret = ">\n"
     ret += '#'
     ret += num_line
-    #ret += ( ' * ' * @width )
+    # ret += ( ' * ' * @width )
     ret += "#\n"
-    # TODO this doesn't look very reasonable ( USE AT METHOD )
+    # TODO: this doesn't look very reasonable ( USE AT METHOD )
     (0...width - 1).each do |i|
       ret += '|'
       (0..height).each do |j|
-        ret += ( ' ' + @board[j][i].to_s + ' ' )
+        ret += (' ' + @board[j][i].to_s + ' ')
       end
       ret += "|\n"
-      #ret += ( col_label + "\n" )
+      # ret += ( col_label + "\n" )
     end
     ret += '#'
     ret += num_line
-    #ret += ( ' * ' * @width )
+    # ret += ( ' * ' * @width )
     ret += "#\n<\n\n"
-    return ret
   end
 
-  def [] (num)
-    @board[num]
-  end
-
-  # TODO improve so the numbers match with the columns
+  # TODO: improve so the numbers match with the columns
   def num_line
-    """
-    ret = ''
-    (1..height).each do |a|
-      ret += ( a.even? ? ' X ' : ' O ' )
-    end # each do
-    ret
-    """
-
     # this isn't perfect because numbers > 9 will take up more space XXX
     ' ' + (1..width).to_a.join('  ') + ' '
   end
 
-  def check_placement (col)
+  def check_placement(col)
     """
     # first check that the column is in bounds
     if !col.between?(0, width - 1)
@@ -75,10 +67,9 @@ class Board
       return false
     end
     """ # XXX MADE REDUNDANT BY MAIN GAME LOOP
-
     # then check if we can place any pieces in that column
     if top_of_col(col).full?
-      puts 'This column is already full!' #TODO make error
+      puts 'This column is already full!' # TODO: make error
       return false
     end
 
@@ -91,7 +82,7 @@ class Board
     r = 0
     count = 0
 
-    while (r < @height)
+    while r < @height
       player_owns = place_at(col, r).belongs_to?(some_player)
       count = player_owns ? count + 1 : 0
       r += 1
@@ -101,7 +92,7 @@ class Board
     # check horizontal
     c = 0
     count = 0
-    while(c < @width)
+    while c < @width
       player_owns = place_at(c, row).belongs_to?(some_player)
       count = player_owns ? count + 1 : 0
       c += 1
@@ -114,7 +105,7 @@ class Board
     r = row - min
     count = 0
 
-    while(in_bounds?(c, r))
+    while in_bounds?(c, r)
       player_owns = at(c, r).belongs_to?(some_player)
       count = player_owns ? count + 1 : 0
       c += 1
@@ -132,7 +123,7 @@ class Board
     puts "col #{c}"
     puts "row #{r}"
 
-    while(in_bounds?(c, r))
+    while in_bounds?(c, r)
       p place_at(c, r)
       player_owns = at(c, r).belongs_to?(some_player)
       count = player_owns ? count + 1 : 0

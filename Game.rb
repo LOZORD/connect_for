@@ -55,10 +55,15 @@ class Game
       # TODO: check that if that was a winning move
       @done = @board.check_win(row, col, curr_player)
 
+      if @done
+        puts @board
+        # TODO: highligh the winning move
+        puts "#{curr_player} is the winner!".cyan
+        break
+      end
+
       @curr_turn += 1
     end
-    puts @board.to_s
-    puts "#{curr_player} is the winner!".cyan
   end
 
   def curr_player

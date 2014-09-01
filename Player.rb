@@ -31,7 +31,7 @@ class Player
   end
 
   def place_piece(col)
-    @board[col].reverse_each do |place|
+    @board.column(col).reverse_each do |place|
       if place.empty?
         place.place_type = @color
         return place.y
