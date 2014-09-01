@@ -17,7 +17,11 @@ class Game
   def build_players
     puts 'Please enter the Players for this game, end with a "#"'
     while ((entry = gets.chomp.strip)[0] != '#')
-      if player_name? entry
+      if entry.empty?
+        puts 'Please enter a non-empty name!'
+      elsif (/^[a-zA-Z]+$/ =~ entry).nil?
+        puts 'Please enter a valid ASCII alphabet name!'
+      elsif player_name? entry
         puts 'That name is already taken. Please enter a new name!'
       else
         @players << Player.new(@board, entry)

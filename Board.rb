@@ -37,29 +37,18 @@ class Board
   alias_method :place_at, :at
 
   def to_s
-    ret = ">\n"
-    ret += '#'
-    ret += num_line
-    # ret += ( ' * ' * @width )
-    ret += "#\n"
-    # TODO: this doesn't look very reasonable ( USE AT METHOD )
-    (0...width - 1).each do |i|
+    ret = ">\n##{ num_line }#\n"
+    height.times do |y|
       ret += '|'
-      (0..height).each do |j|
-        ret += (' ' + @board[j][i].to_s + ' ')
-      end
+      width.times { |x| ret += ret += " #{ board[x][y] } " }
       ret += "|\n"
-      # ret += ( col_label + "\n" )
     end
-    ret += '#'
-    ret += num_line
-    # ret += ( ' * ' * @width )
-    ret += "#\n<\n\n"
+    ret += "##{ num_line }#\n>\n\n"
   end
 
   # TODO: improve so the numbers match with the columns
   def num_line
-    # this isn't perfect because numbers > 9 will take up more space XXX
+    # TODO: this isn't perfect because numbers > 9 will take up more space
     ' ' + (1..width).to_a.join('  ') + ' '
   end
 
