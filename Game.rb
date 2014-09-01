@@ -14,9 +14,13 @@ class Game
     puts 'Please enter the Players for this game, end with a "#"'
 
     while ((entry = gets.chomp.strip)[0] != '#')
-      # TODO put in check for duplicate names
-      @players << Player.new(@board, entry)
-      puts "\tWelcome to the game #{entry}!"
+      player_already_exists = !(@players.index{ |player| player.name == entry }).nil?
+      if player_already_exists
+        puts 'That name is already taken. Please enter a new name!'
+      else
+        @players << Player.new(@board, entry)
+        puts "\tWelcome to the game #{entry}!"
+      end
     end
 
     return false if @players.empty?
