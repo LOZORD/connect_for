@@ -26,8 +26,12 @@ class Board
     @board[n]
   end
 
-  def top_of_col(col_num)
-    place_at(col_num, height - 1)
+  def top_of_col(col_num = nil)
+    if !col_num.nil?
+      place_at(col_num, height - 1)
+    else
+      height - 1
+    end
   end
 
   alias_method :place_at, :at
@@ -60,13 +64,13 @@ class Board
   end
 
   def check_placement(col)
-    """
+    # XXX MADE REDUNDANT BY MAIN GAME LOOP
     # first check that the column is in bounds
-    if !col.between?(0, width - 1)
-      puts 'Out of bounds!' #TODO make error
+    unless col.between?(0, width - 1)
+      puts 'Out of bounds!' # TODO: make error
       return false
     end
-    """ # XXX MADE REDUNDANT BY MAIN GAME LOOP
+
     # then check if we can place any pieces in that column
     if top_of_col(col).full?
       puts 'This column is already full!' # TODO: make error
@@ -125,16 +129,36 @@ class Board
     false
   end
 
-  # let (c,r) be the place NW of (col,row) st (c,r) is at the top of the grid
-  # that means that c is (col + row) - height
-  # and r is at the top
+  # let (c,r) be the place NW of (col,row) st (c,r) is at the NW-most corner
+  # use y = mx + b, where
+  # y = row, x = col, m = -1, and b is where the line intercepts the row-axis
+  # thus, y = mx + b, y = -x + b, y = b - x, y + x = b, b = row + col
+  # similarly, point (c, r) must also be on this line, so
+  # r = mc + b, r = -c + b, r = b - c, r + c = b, b = c + r, c = b - r
+  # we want to find b, so then we can find the correct NW corner
+  # this NW point can either be located at (0, b) or (b - top, top)
   def check_nw_se(row, col, p)
-    c = (col + row) - height # FIXME
-    r = height - 1
-    puts "col #{c}" # XXX
-    puts "row #{r}" # XXX
+    b = row + col
+
+    # two options for possible intercepts
+    y_int = { x: 0, y: b }
+    x_int = { x: b - top_of_col, y: top_of_col }
+    my_int = nil
+
+    if in_bounds?(y_int[:x], y_int[:y])
+      my_int = y_int
+    elsif in_bounds?(x_int[:x], x_int[:y])
+      my_int = x_int
+    else
+      return false
+    end
+
+    c = my_int[:x]
+    r = my_int[:y]
+
+    count = 0
+
     while in_bounds?(c, r)
-      p place_at(c, r)
       player_owns = at(c, r).belongs_to? p
       count = player_owns ? count + 1 : 0
       c += 1

@@ -4,6 +4,7 @@ class Game
   attr_reader :players
   attr_reader :connect_num
 
+  # TODO: add connect_num arg
   def initialize(w = 7, h = 6)
     @board = Board.new(self, w, h)
     @players = []
