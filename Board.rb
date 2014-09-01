@@ -110,24 +110,36 @@ class Board
 
     # check SW/NE
     min = [row, col].min
-    col_min = col - min
-    row_min = row - min
+    c = col - min
+    r = row - min
     count = 0
 
-    while(in_bounds?(col_min, row_min))
-      player_owns = at(col_min, row_min).belongs_to?(some_player)
-      count = player_owns ? count + 1 :0
-      col_min += 1
-      row_min += 1
+    while(in_bounds?(c, r))
+      player_owns = at(c, r).belongs_to?(some_player)
+      count = player_owns ? count + 1 : 0
+      c += 1
+      r += 1
       return true if count >= @game.connect_num
     end
 
-    # check SE/NW TODO
+    # check SE/NW
     # let (c,r) be the place NW of (col,row) st (c,r) is at the top of the grid
     # that means that c is (col + row) - height
-    c = (col + row) - height
+    c = (col + row) - height # FIXME
     # and r is at the top
     r = height - 1
+
+    puts "col #{c}"
+    puts "row #{r}"
+
+    while(in_bounds?(c, r))
+      p place_at(c, r)
+      player_owns = at(c, r).belongs_to?(some_player)
+      count = player_owns ? count + 1 : 0
+      c += 1
+      r -= 1
+      return true if count >= @game.connect_num
+    end
 
     false
   end
