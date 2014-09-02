@@ -40,7 +40,7 @@ class Board
     ret = ">\n##{ num_line }#\n"
     height.times do |y|
       ret += '|'
-      width.times { |x| ret += ret += " #{ board[x][y] } " }
+      width.times { |x| ret += " #{ board[x][y] } " }
       ret += "|\n"
     end
     ret += "##{ num_line }#\n>\n\n"
