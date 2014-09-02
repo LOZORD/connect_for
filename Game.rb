@@ -11,7 +11,7 @@ class Game
     @curr_turn = 0
     @connect_num = cn
 
-    return false if build_players.empty? # TODO: raise exception or something
+    return false if build_players.empty?
   end
 
   def build_players

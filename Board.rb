@@ -56,13 +56,13 @@ class Board
     # XXX MADE REDUNDANT BY MAIN GAME LOOP
     # first check that the column is in bounds
     unless col.between?(0, width - 1)
-      puts 'Out of bounds!' # TODO: make error
+      puts 'Out of bounds!'
       return false
     end
 
     # then check if we can place any pieces in that column
     if top_of_col(col).full?
-      puts 'This column is already full!' # TODO: make error
+      puts 'This column is already full!'
       return false
     end
     true
@@ -76,7 +76,7 @@ class Board
 
     return true if check_sw_ne(row, col, some_player)
 
-    return true if check_nw_se(row, col, some_player) # FIXME
+    return true if check_nw_se(row, col, some_player)
     # TODO: use the colored gem to highlight the winning move
     false
   end
