@@ -16,16 +16,19 @@ class Game
 
   def build_players
     puts 'Please enter the Players for this game, end with a "#"'
-    while ((entry = gets.chomp.strip)[0] != '#')
+    loop do
+      entry = gets.chomp.strip
       if entry.empty?
         puts 'Please enter a non-empty name!'
+      elsif entry == '#'
+        break
       elsif (/^[a-zA-Z]+$/ =~ entry).nil?
-        puts 'Please enter a valid ASCII alphabet name!'
+        puts 'Please enter a valid ASCII alphabet-only name'
       elsif player_name? entry
         puts 'That name is already taken. Please enter a new name!'
       else
         @players << Player.new(@board, entry)
-        puts "\tWelcome to the game #{entry}!"
+        puts "\tWelcome to the game #{ entry }!"
       end
     end
     @players
@@ -56,7 +59,6 @@ class Game
 
       row = curr_player.place_piece(col)
 
-      # TODO: check that if that was a winning move
       @done = @board.check_win(row, col, curr_player)
 
       if @done
