@@ -31,16 +31,16 @@ class Place
 
   alias_method :belongs_to?, :belongs_to_player?
 
-  def to_s
+  def to_s(win_print = false)
     case @place_type
     when RED
-      return 'R'.red
+      return (win_print ? 'R'.red.reversed : 'R'.red)
     when BLUE
-      return 'B'.blue
+      return (win_print ? 'B'.blue.reversed : 'B'.blue)
     when GREEN
-      return 'G'.green
+      return (win_print ? 'G'.green.reversed : 'G'.green)
     when YELLOW
-      return 'Y'.yellow
+      return (win_print ? 'Y'.yellow.reversed : 'Y'.yellow)
     else
       return '_'.white
     end

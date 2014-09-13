@@ -27,7 +27,11 @@ class Game
       elsif player_name? entry
         puts 'That name is already taken. Please enter a new name!'
       else
-        @players << Player.new(@board, entry)
+        if entry.downcase.start_with?('bot')
+          @players << AIPlayer.new(@board, entry)
+        else
+          @players << Player.new(@board, entry)
+        end
         puts "\tWelcome to the game #{ entry }!"
       end
     end
@@ -45,25 +49,32 @@ class Game
       print "#{curr_player}'s turn! "
       print "Enter a number between 1 and #{@board.width}: "
 
-      until (col = gets.chomp.strip.to_i).between?(1, @board.width)
-        print "Please enter a number between 1 and #{@board.width}! "
-      end
+      if (curr_player.is_a_bot?)
+        col = curr_player.decide_move
+        puts col
+      else
+        until (col = gets.chomp.strip.to_i).between?(1, @board.width)
+          print "Please enter a number between 1 and #{@board.width}! "
+        end
 
-      # human indexing to computer indexing
-      col -= 1
-
-      until @board.check_placement(col)
-        print "\tPlease enter a new number between 1 and #{@board.width}! "
-        col = gets.chomp.strip.to_i - 1
+        # human indexing to computer indexing
+        col -= 1
+        until @board.check_placement(col)
+          print "\tPlease enter a new number between 1 and #{@board.width}! "
+          col = gets.chomp.strip.to_i - 1
+        end
       end
 
       row = curr_player.place_piece(col)
 
-      @done = @board.check_win(row, col, curr_player)
+      seq = @board.check_win(row, col, curr_player)
+
+      puts seq
+
+      @done = (seq.size == @connect_num)
 
       if @done
-        puts @board
-        # TODO: highligh the winning move
+        puts @board.to_s(seq)
         puts "#{curr_player} is the winner!".cyan
         break
       end

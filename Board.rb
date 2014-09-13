@@ -36,11 +36,16 @@ class Board
 
   alias_method :place_at, :at
 
-  def to_s
+  def to_s (winning_seq = [])
     ret = ">\n##{ num_line }#\n"
     height.times do |y|
       ret += '|'
-      width.times { |x| ret += " #{ board[x][y] } " }
+      width.times do |x|
+        curr_place = board[x][y]
+        #win_print = winning_seq.include?(curr_place)
+        win_print = !(winning_seq.index { |place| place.x == curr_place.x && place.y == curr_place.y }).nil?
+        ret += " #{ curr_place.to_s(win_print) } "
+      end
       ret += "|\n"
     end
     ret += "##{ num_line }#\n>\n\n"
@@ -70,52 +75,66 @@ class Board
 
   # XXX might be good to move this into the Game class
   def check_win(row, col, some_player)
-    return true if check_vertical(col, some_player)
-
-    return true if check_horizontal(row, some_player)
-
-    return true if check_sw_ne(row, col, some_player)
-
-    return true if check_nw_se(row, col, some_player)
-    # TODO: use the colored gem to highlight the winning move
-    false
+    seq = check_vertical(col, some_player)
+    return seq unless seq.empty?
+    seq = check_horizontal(col, some_player)
+    return seq unless seq.empty?
+    seq = check_sw_ne(row, col, some_player)
+    return seq unless seq.empty?
+    seq = check_nw_se(row, col, some_player)
+    return seq unless seq.empty?
+    []
   end
 
   def check_vertical(col, p)
-    count = r = 0
+    r = 0
+    seq = []
     while r < @height
       player_owns = place_at(col, r).belongs_to? p
-      count = player_owns ? count + 1 : 0
+      if player_owns
+        seq << place_at(col, r)
+      else
+        seq.clear
+      end
       r += 1
-      return true if count >= @game.connect_num
+      return seq if seq.size >= @game.connect_num
     end
-    false
+    []
   end
 
   def check_horizontal(row, p)
-    count = c = 0
+    c = 0
+    seq = []
     while c < @width
       player_owns = place_at(c, row).belongs_to? p
-      count = player_owns ? count + 1 : 0
+      if player_owns
+        seq << place_at(c, row)
+      else
+        seq.clear
+      end
       c += 1
-      return true if count >= @game.connect_num
+      return seq if seq.size >= @game.connect_num
     end
-    false
+    []
   end
 
   def check_sw_ne(row, col, p)
     min = [row, col].min
     c = col - min
     r = row - min
-    count = 0
+    seq = []
     while in_bounds?(c, r)
       player_owns = place_at(c, r).belongs_to? p
-      count = player_owns ? count + 1 : 0
+      if player_owns
+        seq << place_at(c, r)
+      else
+        seq.clear
+      end
       c += 1
       r += 1
-      return true if count >= @game.connect_num
+      return true if seq.size >= @game.connect_num
     end
-    false
+    []
   end
 
   # let (c,r) be the place NW of (col,row) st (c,r) is at the NW-most corner
@@ -139,21 +158,25 @@ class Board
     elsif in_bounds?(x_int[:x], x_int[:y])
       my_int = x_int
     else
-      return false
+      []
     end
 
     c = my_int[:x]
     r = my_int[:y]
 
-    count = 0
+    seq = []
 
     while in_bounds?(c, r)
       player_owns = at(c, r).belongs_to? p
-      count = player_owns ? count + 1 : 0
+      if player_owns
+        seq << place_at(c, r)
+      else
+        seq.clear
+      end
       c += 1
       r -= 1
-      return true if count >= @game.connect_num
+      return seq if seq.size >= @game.connect_num
     end
-    false
+    []
   end
 end # end class

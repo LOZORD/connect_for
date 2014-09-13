@@ -44,4 +44,8 @@ class Player
   def to_s
     @name
   end
+
+  def is_a_bot?
+    self.is_a?(AIPlayer)
+  end
 end
