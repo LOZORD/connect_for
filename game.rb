@@ -4,13 +4,18 @@ class Game
   attr_reader :players
   attr_reader :connect_num
 
-  def initialize(some_players = [], w = 7, h = 6, cn = 4)
+  def initialize(options = {})
+    w = options[:width] || 6
+    h = options[:height] || 7
+    cn = options[:connect_number] || 4
+    some_players = options[:players] || []
     @board = Board.new(self, w, h)
     @done = false
     @curr_turn = 0
     @connect_num = cn
     if some_players.empty?
       puts 'Enter the player names for this game, each on a line, end with "#"'
+      puts 'To end game in a draw, enter "DRAW" for your turn'
       build_players
     else
       some_players.each { |name| add_player name if valid_name? name }
@@ -67,6 +72,9 @@ class Game
         end
         puts col + 1
       else
+        col = gets.chomp.strip
+        check_draw if col.upcase == 'DRAW'
+        col = col.to_i
         until (col = gets.chomp.strip.to_i).between?(1, @board.width)
           print "Please enter a number between 1 and #{@board.width}! "
         end
@@ -107,5 +115,9 @@ class Game
   def curr_player
     index = @curr_turn % @players.size
     @players[index]
+  end
+
+  def check_draw
+    # TODO: implement
   end
 end

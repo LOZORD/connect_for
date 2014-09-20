@@ -13,6 +13,6 @@ require_relative 'ai.rb'
 # XXX TESTING XXX #
 
 # first set up the game
-my_game = Game.new(ARGV)
+my_game = Game.new(players: ARGV)
 # then play it
 my_game.play
