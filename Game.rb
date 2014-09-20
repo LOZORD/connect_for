@@ -69,7 +69,7 @@ class Game
 
       seq = @board.check_win(row, col, curr_player)
 
-      puts seq
+      # puts seq
 
       @done = (seq.size == @connect_num)
 

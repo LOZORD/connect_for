@@ -19,11 +19,23 @@ class Board
   end
 
   def at(x, y)
-    @board[x][- y - 1]
+    p = @board[x][- y - 1]
+    return p if p
+    puts "at(x = #{x}, y = #{y})"
+    return false
   end
 
   def column(n)
     @board[n]
+  end
+
+  def col_full?(n)
+    @board[n].each do |place|
+      if !place.full?
+        return false
+      end
+    end
+    true
   end
 
   def top_of_col(col_num = nil)
@@ -42,8 +54,7 @@ class Board
       ret += '|'
       width.times do |x|
         curr_place = board[x][y]
-        #win_print = winning_seq.include?(curr_place)
-        win_print = !(winning_seq.index { |place| place.x == curr_place.x && place.y == curr_place.y }).nil?
+        win_print = !(winning_seq.index { |win_place| curr_place.same_xy? win_place }).nil?
         ret += " #{ curr_place.to_s(win_print) } "
       end
       ret += "|\n"
@@ -66,7 +77,7 @@ class Board
     end
 
     # then check if we can place any pieces in that column
-    if top_of_col(col).full?
+    if top_of_col(col).full? || col_full?(col)
       puts 'This column is already full!'
       return false
     end
@@ -77,7 +88,7 @@ class Board
   def check_win(row, col, some_player)
     seq = check_vertical(col, some_player)
     return seq unless seq.empty?
-    seq = check_horizontal(col, some_player)
+    seq = check_horizontal(row, some_player)
     return seq unless seq.empty?
     seq = check_sw_ne(row, col, some_player)
     return seq unless seq.empty?

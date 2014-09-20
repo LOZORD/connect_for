@@ -31,6 +31,10 @@ class Place
 
   alias_method :belongs_to?, :belongs_to_player?
 
+  def same_xy? (other_place)
+    self.x == other_place.x && self.y == other_place.y
+  end
+
   def to_s(win_print = false)
     case @place_type
     when RED

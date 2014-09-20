@@ -9,10 +9,15 @@ class AIPlayer < Player
   end
 
   def defend
+  # move across the board, looking for possible wins for other players
+  # TODO
 
+  nil
   end
 
   def attack
   
+  # TODO
+  nil
   end
 end
