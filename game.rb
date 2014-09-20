@@ -4,7 +4,7 @@ class Game
   attr_reader :players
   attr_reader :connect_num
 
-  def initialize(w = 7, h = 6, cn = 4, some_players = [])
+  def initialize(some_players = [], w = 7, h = 6, cn = 4)
     @board = Board.new(self, w, h)
     @done = false
     @curr_turn = 0
@@ -13,11 +13,12 @@ class Game
       puts 'Enter the player names for this game, each on a line, end with "#"'
       build_players
     else
-      @players = some_players
+      some_players.each { |name| add_player name if valid_name? name }
     end
   end
 
   def build_players
+    @players ||= []
     loop do
       entry = gets.chomp.strip
       if entry == '#'
@@ -30,23 +31,26 @@ class Game
   end
 
   def valid_name?(some_name)
+    @players ||= []
     if some_name.empty?
       puts 'Please enter a non-empty name!'.red
     elsif (/^[\w]+$/ =~ some_name).nil?
       puts 'Please enter a valid ASCII alphabet-only name'.red
     elsif player_name? some_name
       puts 'That name is already taken. Please enter a new name!'.red
+    else
+      true
     end
-    true
   end
 
   def add_player(some_name)
+    @players ||= []
     if some_name.downcase.start_with?('bot')
-      @players << AIPlayer.new(@board, entry)
+      @players << AIPlayer.new(@board, some_name)
     else
-      @players << Player.new(@board, entry)
+      @players << Player.new(@board, some_name)
     end
-    puts "\tWelcome to the game #{ entry }!".yellow
+    puts "\tWelcome to the game #{ some_name }!".yellow
   end
 
   def player_name?(name)
@@ -55,14 +59,13 @@ class Game
 
   def play
     until @done
-      puts board
-
-      print "#{curr_player}'s turn! "
-      print "Enter a number between 1 and #{@board.width}: "
-
+      start_round
       if curr_player.is_a_bot?
         col = curr_player.decide_move
-        puts col
+        until board.check_placement(col)
+          col = curr_player.decide_move
+        end
+        puts col + 1
       else
         until (col = gets.chomp.strip.to_i).between?(1, @board.width)
           print "Please enter a number between 1 and #{@board.width}! "
@@ -75,6 +78,9 @@ class Game
           col = gets.chomp.strip.to_i - 1
         end
       end
+
+      # TODO: create counter that checks if game is over ie there are no possible moves
+      # TODO: also create special char that players enter to initiate a tie/draw
 
       row = curr_player.place_piece(col)
 
@@ -90,6 +96,12 @@ class Game
 
       @curr_turn += 1
     end
+  end
+
+  def start_round
+    puts board
+    print "#{curr_player}'s turn! "
+    print "Enter a number between 1 and #{board.width}: "
   end
 
   def curr_player

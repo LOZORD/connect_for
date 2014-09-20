@@ -4,7 +4,7 @@ class AIPlayer < Player
     return col unless col.nil?
     col = attack
     return col unless col.nil?
-    col = rand(1...board.width)
+    col = rand(0...board.width)
     return col
   end
 

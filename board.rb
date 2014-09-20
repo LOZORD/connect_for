@@ -19,10 +19,7 @@ class Board
   end
 
   def at(x, y)
-    p = @board[x][- y - 1]
-    return p if p
-    puts "at(x = #{x}, y = #{y})"
-    return false
+    board[x][- y - 1]
   end
 
   def column(n)
@@ -143,7 +140,7 @@ class Board
       end
       c += 1
       r += 1
-      return true if seq.size >= @game.connect_num
+      return seq if seq.size >= @game.connect_num
     end
     []
   end

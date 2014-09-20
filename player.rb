@@ -37,8 +37,6 @@ class Player
         return place.y
       end
     end
-    puts "COL: #{col}"
-    puts 'SOMETHING BAD HAS HAPPENED!'
     false
   end
 
